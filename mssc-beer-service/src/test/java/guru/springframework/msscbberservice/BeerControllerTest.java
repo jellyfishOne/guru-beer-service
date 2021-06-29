@@ -42,6 +42,8 @@ import guru.springframework.msscbberservice.web.model.BeerDto;
 import guru.springframework.msscbberservice.web.model.BeerStyleEnum;
 
 @ExtendWith(RestDocumentationExtension.class)
+// If you need to configure host name (URI Customization)
+// @AutoConfigureRestDocs(uriScheme = "https", uriHost = "dev.practriceSrping.com", uriPort = 80)
 @AutoConfigureRestDocs
 @WebMvcTest(BeerController.class)
 @ComponentScan(basePackages = "guru.springframework.msscbberservice.web.mappers")
