@@ -65,7 +65,7 @@ public class BeerControllerTest {
         		.param("iscold", "yes")
         		.accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-        		.andDo(document("v1/beer", 
+        		.andDo(document("v1/beer-get", 
         				pathParameters(
         						parameterWithName("beerId").description("UUID of desired beer to get.")
         						),
@@ -89,25 +89,14 @@ public class BeerControllerTest {
     void saveNewBeer() throws Exception {
         BeerDto beerDto =  getValidBeerDto();
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
-
-        mockMvc.perform(post("/api/v1/beer/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(beerDtoJson))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    void updateBeerById() throws Exception {
-        BeerDto beerDto =  getValidBeerDto();
-        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
         
         ConstrainedFields fields = new ConstrainedFields(BeerDto.class);
         
-        mockMvc.perform(put("/api/v1/beer/" + UUID.randomUUID().toString())
+        mockMvc.perform(post("/api/v1/beer/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerDtoJson))
-                .andExpect(status().isNoContent())
-                .andDo(document("v1/beer",
+                .andExpect(status().isCreated())
+                .andDo(document("v1/beer-new",
                 		requestFields(
                             fields.withPath("id").ignored(),
                             fields.withPath("version").ignored(),
@@ -119,6 +108,17 @@ public class BeerControllerTest {
                             fields.withPath("price").description("Beer Price"),
                             fields.withPath("quantityOnHand").ignored()
                     )));
+    }
+    
+    @Test
+    void updateBeerById() throws Exception {
+        BeerDto beerDto =  getValidBeerDto();
+        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
+
+        mockMvc.perform(put("/api/v1/beer/" + UUID.randomUUID().toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(beerDtoJson))
+                .andExpect(status().isNoContent());
     }
 
     BeerDto getValidBeerDto(){
